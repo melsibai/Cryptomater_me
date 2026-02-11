@@ -1,13 +1,6 @@
-name: Build
-
-on:
-  push:
-  pull_request_target:
-    types: [labeled]
-
 jobs: 
   build:
-    name: Test
+    name: Build and Save APK
     runs-on: ubuntu-latest
     if: "!contains(github.event.head_commit.message, '[ci skip]') && !contains(github.event.head_commit.message, '[skip ci]')"
     steps:
@@ -18,5 +11,15 @@ jobs:
       - uses: actions/setup-java@v1
         with:
           java-version: 17
-      - name: Build and Test
-        run: bash ./gradlew clean test --stacktrace
+      
+      # Step A: Create the APK file
+      - name: Assemble APK
+        run: bash ./gradlew assembleFdroidDebug
+
+      # Step B: Upload the APK so you can download it
+      - name: Upload APK Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: cryptomator-modded-apk
+          path: "**/build/outputs/apk/**/*.apk"
+          
