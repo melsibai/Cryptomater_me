@@ -61,7 +61,7 @@ public class DoLicenseCheck {
                } catch (NoSuchAlgorithmException | InvalidKeySpecException e) {
                        throw new FatalBackendException(e);
                }
-               };
+            
         }
  
 
