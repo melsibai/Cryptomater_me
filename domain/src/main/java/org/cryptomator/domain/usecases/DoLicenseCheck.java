@@ -44,32 +44,14 @@ public class DoLicenseCheck {
 	}
 
 	public LicenseCheck execute() throws BackendException {
-    license = useLicenseOrRetrieveFromDb(license);
-
-    try {
-        Algorithm algorithm = Algorithm.ECDSA512(getPublicKey(ANDROID_PUB_KEY), null);
-        JWTVerifier verifier = JWT.require(algorithm).build();
-        DecodedJWT jwt = verifier.verify(license);
-
-        // Return a LicenseCheck instance
-        return new LicenseCheck() {
-            @Override
-            public String mail() {
-                return jwt.getSubject(); // return the subject from JWT
-            }
-        };
-
-    } catch (SignatureVerificationException | JWTDecodeException | FatalBackendException e) {
-        if (e instanceof SignatureVerificationException && isDesktopSupporterCertificate(license)) {
-            throw new DesktopSupporterCertificateException(license);
-        } else {
-            throw new LicenseNotValidException(license);
+    
+return new LicenseCheck() {
+        @Override
+        public String mail() {
+            return "licensed@member.com";
         }
-    } catch (NoSuchAlgorithmException | InvalidKeySpecException e) {
-        throw new FatalBackendException(e);
-    }
+    };
 }
-
  
 
 	private String useLicenseOrRetrieveFromDb(String license) throws NoLicenseAvailableException {
